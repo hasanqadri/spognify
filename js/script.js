@@ -42,6 +42,10 @@ function writeFormData(genre, uid, formData) {
     });
 }
 
+function updateCount(state) {
+    firebase.database().ref('count/' + state).set(firebase.database.ServerValue.increment(1))
+}
+
 nextBtnFirst.addEventListener("click", function(event){
     event.preventDefault();
     slidePage.style.marginLeft = "-25%";
@@ -155,7 +159,7 @@ submitBtn.addEventListener("click", function(){
     progressCheck[current - 1].classList.add("active");
     progressText[current - 1].classList.add("active");
     current += 1;
-
+    updateCount("success")
 });
 
 submitBtn2.addEventListener("click", function(){
@@ -165,7 +169,7 @@ submitBtn2.addEventListener("click", function(){
 
     //Date.now() serves as unique id. Write data to db with genre
     writeFormData(rec, Date.now(), formData)
-
+    updateCount("fail")
 });
 
 
