@@ -1,89 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
-<meta charset="utf-8">
-
+<!-- Original UI By CodingNepal -->
+<!-- Refactored by Spognify -->
+<html lang="en" dir="ltr">
 <head>
-    <!-- add stylesheets here-->
-    <link href="css/styling.css" rel="stylesheet">
-
-    <!--- External libs -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://d3js.org/topojson.v1.min.js"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js'></script>
-    <script src="js/lib/d3-tip.js"></script>
-
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
+<body>
+<div class="container">
+    <header>Spognify: Music Recommender</header>
 
-<body onload="controller()">
-
-    <link rel="stylesheet" href="css/w3.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-
-    <!-- Navbar (sit on top) -->
-    <div class="w3-top">
-        <ul class="w3-navbar w3-cyan w3-wide w3-padding-0 w3-card-2 ">
-            <font color="white" font-family = "Impact, Charcoal, sans-serif">
-                <h3><img src = "./data/logo.png" width="70px" height="40px" class="w3-margin-bot-logo">UNESCO Data Exploration Tool</h3></font>
-        </ul>
-    </div>
-
-    <!-- Holds the left and right divs -->
-    <div style="width: 98%; clear:both; display:inline-block; top:1000px; margin-left: 25px;">
-
-        <!-- Left div -->
-        <div class="w3-card-4 " >
-            <div style="visibility:visible;display:block;padding-top: 150px">
-                <div id="dataInfo" style="margin-left:30px;" class="w3-center">
-
-                </div>
-            <h1 class="w3-margin-top  fontCustom w3-margin-top w3-center" id="head-title">Spognify</h1>
-            <h3 class="w3-margin-top w3-center" id="sub-title"></h3>
-            <div class="w3-margin-left w3-padding-left"><i></i></div>
-
+    <!--- Progress bar --->
+    <div class="progress-bar">
+        <div class="step">
+            <p>
+                1</p>
+            <div class="bullet">
+                <span>1</span>
+            </div>
+            <div class="check fas fa-check">
+            </div>
+        </div>
+        <div class="step">
+            <p>
+                2</p>
+            <div class="bullet">
+                <span>2</span>
+            </div>
+            <div class="check fas fa-check">
+            </div>
+        </div>
+        <div class="step">
+            <p>
+                3</p>
+            <div class="bullet">
+                <span>3</span>
+            </div>
+            <div class="check fas fa-check">
+            </div>
+        </div>
+        <div class="step">
+            <p>
+                4</p>
+            <div class="bullet">
+                <span>4</span>
+            </div>
+            <div class="check fas fa-check">
+            </div>
+        </div>
+        <div class="step">
+            <p>
+                5</p>
+            <div class="bullet">
+                <span>5</span>
+            </div>
+            <div class="check fas fa-check">
+            </div>
+        </div>
+        <div class="step">
+            <p>
+                Results</p>
+            <div class="bullet">
+                <span>6</span>
+            </div>
+            <div class="check fas fa-check">
             </div>
         </div>
     </div>
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/8.4.2/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="/__/firebase/8.4.2/firebase-analytics.js"></script>
+    <!--- Form data --->
+    <div class="form-outer">
+        <form action="#">
+            <!-- 1 -->
+            <div class="page slide-page">
+                <div class="title">
+                    What is your current mood?</div>
+                <div class="field">
+                    <input type="text" id="mood">
+                </div>
+                <div class="field">
+                    <button class="firstNext next">Next</button>
+                </div>
+            </div>
 
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-</body>
-<!-- Remember to place javascript files we add below here -->
+            <!-- 2 -->
+            <div class="page">
+                <div class="title">
+                    What are you currently doing?</div>
+                <div class="field">
+                    <input type="text">
+                </div>
+                <div class="field btns">
+                    <button class="next-1 next">Next</button>
+                </div>
+            </div>
 
+            <!-- 3 -->
+            <div class="page">
+                <div class="title">
+                    Are you currently with friends and/or family?</div>
+                <div class="field">
+                            <label id="social">
+                                <input type="radio" name="choice-radio">
+                                Yes
+                            </label>
+                            <label style="margin-left:20px;">
+                                <input type="radio" name="choice-radio">
+                                No
+                            </label>
+                </div>
+                </p>
+                <br>
+
+                <div class="field btns">
+                    <button class="next-2 next">Next</button>
+                </div>
+            </div>
+
+
+            <!-- 3 -->
+            <div class="page">
+                <div class="title">
+                    Do you want to listen to lyric-heavy songs?</div>
+                <div class="field">
+                    <label id="lyric">
+                        <input type="radio" name="choice-radio">
+                        Yes
+                    </label>
+                    <label style="margin-left:20px;">
+                        <input type="radio" name="choice-radio">
+                        No
+                    </label>
+                </div>
+                </p>
+                <br>
+
+                <div class="field btns">
+                    <button class="next-3 next">Next</button>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="page">
+                <div class="title">
+                    Are you currently listening to an artist? </div>
+                <div class="field yesno">
+                    <label>
+                        <input type="radio" name="choice-radio">
+                        Yes
+                    </label>
+                    <label style="margin-left:20px;">
+                        <input type="radio" name="choice-radio">
+                        No
+                    </label>
+                </div>
+                </p>
+                <div class="field">
+                    If so, what artist?
+                    <p></p><br>
+                    <input type="text" id="artist">
+                </div>
+                <div class="field btns">
+                    <button class="next-4 next">Next</button>
+                </div>
+            </div>
+
+
+            <!-- 6 -->
+            <div class="page">
+                <div class="title">
+                    You should listen to:</div>
+                <div class="field">
+                    <div class="label" style="color: green; text-align:center">
+                        <h3 style="">
+                            Country
+                        </h3>
+                    </div>
+                </div>
+                <div class="field btns">
+                    <button class="submit next">Sounds Good!</button>
+                </div>
+
+                <div class="field btns">
+                    <button class="next-5 next">Ummm, no.</button>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="title">
+                    Are you dissatisfied with our recommendation?</div>
+                <div>
+                    <br>
+                    If so, please input what genre you would rather listen to:
+
+                    <div class="field">
+                        <input type="text" id="rec">
+                    </div>
+                </div>
+                <div class="field btns">
+                    <button class="submit2">submit</button>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="title" style="color:#20DE2A; margin-left:30px;">
+                    <h2>Thank you!</h2></div>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="/__/firebase/8.4.2/firebase-app.js"></script>
+
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<script src="/__/firebase/8.4.2/firebase-analytics.js"></script>
+
 <!-- Initialize Firebase -->
-
-<!-- add js libraries here-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
-
-
-<script src="js/lib/jquery-3.1.1.min.js"></script>
-<script src="js/lib/jquery-ui.min.js"></script>
-<script src="js/lib/topojson.js"></script>
-<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
-<!-- <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> -->
-
-<!--script src="js/bootstrap.min.js"></script-->
-<script src="js/lib/queue.v1.min.js"></script>
-
-<!-- add custom js files here -->
-<script src="js/correlation.js"></script>
-<!-- add custom js files here -->
-<script src="js/world-map.js"></script>
-<script src="js/controller.js"></script>
-<script src="js/linechart.js"></script>
-<script src="js/bargraph.js"></script>
-<script src="js/ui.js"></script>
-
+<script src="/__/firebase/init.js"></script>
+<script src="js/script.js"></script>
+</body>
 </html>
