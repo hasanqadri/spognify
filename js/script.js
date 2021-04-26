@@ -117,12 +117,21 @@ nextBtnFifth.addEventListener("click", function(event){
                     // key will be "ada" the first time and "alan" the second time
                     // childData will be the actual contents of the child
                     childData = gChildSnapshot.val();
-                    currSimilarity = similarity(JSON.stringify(formData), JSON.stringify(childData))
+                    console.log(childData)
+                    console.log(formData)
+                    var mo = similarity(formData['mood'], childData['mood'])
+                    var ac = similarity(formData['activity'], childData['activity'])
+                    var so = (formData['social'] === childData['social']) ? .5 : 0
+                    var ly = (formData['lyrics'] === childData['lyrics']) ? .6 : 0
+                    var is = (formData['isArtist'] === childData['isArtist']) ? .2 : 0
+                    var ar = similarity(formData['artist'], childData['artist'])
+                    currSimilarity = mo + ac + so + ly + is + ar
                     if (genreSimilarity[key] < currSimilarity) {
                         genreSimilarity[key] = currSimilarity;
                     }
                 });
             });
+            console.log(genreSimilarity)
             finalSuggestion = Object.getOwnPropertyNames(genreSimilarity).reduce(function(a, b){ return genreSimilarity[a] > genreSimilarity[b] ? a : b });
             console.log(finalSuggestion)
             document.getElementById("finalSuggest").textContent = finalSuggestion.charAt(0).toUpperCase() + finalSuggestion.slice(1);
