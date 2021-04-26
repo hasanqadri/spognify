@@ -1,4 +1,4 @@
-## Interface to interact with UNESCO Data  
+## Interface to interact with Spognify application
 
 To Run locally, execute:  
 ```
