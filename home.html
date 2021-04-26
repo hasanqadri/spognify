@@ -90,7 +90,7 @@
                 <div class="title">
                     What are you currently doing?</div>
                 <div class="field">
-                    <input type="text">
+                    <input type="text" id="activity">
                 </div>
                 <div class="field btns">
                     <button class="next-1 next">Next</button>
@@ -102,8 +102,8 @@
                 <div class="title">
                     Are you currently with friends and/or family?</div>
                 <div class="field">
-                            <label id="social">
-                                <input type="radio" name="choice-radio">
+                            <label >
+                                <input type="radio" name="choice-radio" id="social">
                                 Yes
                             </label>
                             <label style="margin-left:20px;">
@@ -125,8 +125,8 @@
                 <div class="title">
                     Do you want to listen to lyric-heavy songs?</div>
                 <div class="field">
-                    <label id="lyric">
-                        <input type="radio" name="choice-radio">
+                    <label >
+                        <input type="radio" name="choice-radio" id="lyric">
                         Yes
                     </label>
                     <label style="margin-left:20px;">
@@ -148,7 +148,7 @@
                     Are you currently listening to an artist? </div>
                 <div class="field yesno">
                     <label>
-                        <input type="radio" name="choice-radio">
+                        <input type="radio" name="choice-radio" id="isArtist">
                         Yes
                     </label>
                     <label style="margin-left:20px;">
@@ -174,7 +174,7 @@
                     You should listen to:</div>
                 <div class="field">
                     <div class="label" style="color: green; text-align:center">
-                        <h3 style="">
+                        <h3 style="" id="finalSuggest">
                             Country
                         </h3>
                     </div>
@@ -211,15 +211,15 @@
         </form>
     </div>
 </div>
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/8.4.2/firebase-app.js"></script>
 
+<!-- The core Firebase JS SDK is always required and must be listed first -->
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="/__/firebase/8.4.2/firebase-analytics.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
 <!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
-<script src="js/script.js"></script>
+
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

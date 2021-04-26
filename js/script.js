@@ -1,4 +1,4 @@
-<!-- Created By CodingNepal -->
+//Created By CodingNepal
 // Refactored by Spognify
 const slidePage = document.querySelector(".slide-page");
 const nextBtnFirst = document.querySelector(".firstNext");
@@ -13,35 +13,35 @@ const progressText = document.querySelectorAll(".step p");
 const progressCheck = document.querySelectorAll(".step .check");
 const bullet = document.querySelectorAll(".step .bullet");
 let current = 1;
-formData = {'mood': "", 'activity': '', 'social': false, 'lyrics': false, 'isArtist': false, 'artist': ''}
+var formData = {'mood': "", 'activity': '', 'social': false, 'lyrics': false, 'isArtist': false, 'artist': ''}
 // Set the configuration for your app
 // TODO: Replace with your project's config object
 var config = {
-    apiKey: "apiKey",
     authDomain: "spognify.firebaseapp.com",
     // For databases not in the us-central1 location, databaseURL will be of the
     // form https://[databaseName].[region].firebasedatabase.app.
     // For example, https://your-database-123.europe-west1.firebasedatabase.app
     databaseURL: "https://spognify-default-rtdb.firebaseio.com/",
-    storageBucket: "bucket.appspot.com"
+    storageBucket: "spognify.appspot.com"
 };
 firebase.initializeApp(config);
 
 // Get a reference to the database service
 var database = firebase.database();
-var database = firebase.database();
-const dbRef = firebase.database().ref();
+const dbRef = database.ref();
+var finalSuggestion = "";
 
 function writeFormData(genre, uid, formData) {
     firebase.database().ref('genres/' + genre + '/' + uid).set({
         mood: formData['mood'],
         activity: formData['activity'],
         social: formData['social'],
-        lyrics: formData['lyrics']
+        lyrics: formData['lyrics'],
         isArtist: formData['isArtist'],
         artist: formData['artist']
     });
 }
+
 nextBtnFirst.addEventListener("click", function(event){
     event.preventDefault();
     slidePage.style.marginLeft = "-25%";
@@ -50,7 +50,7 @@ nextBtnFirst.addEventListener("click", function(event){
     progressText[current - 1].classList.add("active");
     current += 1;
     var mood = document.getElementById("mood").value;
-    formData['mood'] = mood;
+    formData['mood'] = mood.toLowerCase();
 });
 nextBtnSec.addEventListener("click", function(event){
     event.preventDefault();
@@ -60,7 +60,7 @@ nextBtnSec.addEventListener("click", function(event){
     progressText[current - 1].classList.add("active");
     current += 1;
     var activity = document.getElementById("activity").value;
-    formData['activity'] = activity;
+    formData['activity'] = activity.toLowerCase();
 
 
 });
@@ -71,8 +71,8 @@ nextBtnThird.addEventListener("click", function(event){
     progressCheck[current - 1].classList.add("active");
     progressText[current - 1].classList.add("active");
     current += 1;
-    var social = document.getElementById("social").value;
-    if (social[0].checked) {
+    var social = document.getElementById("social").checked;
+    if (social) {
         formData['social'] = true;
     }
 });
@@ -83,8 +83,8 @@ nextBtnFourth.addEventListener("click", function(event){
     progressCheck[current - 1].classList.add("active");
     progressText[current - 1].classList.add("active");
     current += 1;
-    var lyric = document.getElementById("lyric").value;
-    if (lyric[0].checked) {
+    var lyric = document.getElementById("lyric").checked;
+    if (lyric) {
         formData['lyric'] = true;
     }
 });
@@ -95,31 +95,44 @@ nextBtnFifth.addEventListener("click", function(event){
     progressCheck[current - 1].classList.add("active");
     progressText[current - 1].classList.add("active");
     current += 1;
-    var isArtist = document.getElementById("isArtist").value;
-    if (isArtist[0].checked) {
+    var isArtist = document.getElementById("isArtist").checked;
+    if (isArtist) {
         formData['isArtist'] = true;
         var artist = document.getElementById("artist").value;
-        formData['arist'] = artist;
+        formData['arist'] = artist.toLowerCase();
     }
 
-    dbRef.child("genres").get().then((snapshot) => {
-        if (snapshot.exists()) {
-            console.log(snapshot.val());
-        } else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
+    //Decide genre similarity based on form input
+    var genreSimilarity = {}
+    var ref = firebase.database().ref("genres");
+    var key;
+    var childData;
+    var currSimilarity;
+    ref.once("value")
+        .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                key = childSnapshot.key;
+                genreSimilarity[key] = -1
+                childSnapshot.forEach(function(gChildSnapshot) {
+                    // key will be "ada" the first time and "alan" the second time
+                    // childData will be the actual contents of the child
+                    childData = gChildSnapshot.val();
+                    currSimilarity = similarity(JSON.stringify(formData), JSON.stringify(childData))
+                    if (genreSimilarity[key] < currSimilarity) {
+                        genreSimilarity[key] = currSimilarity;
+                    }
+                });
+            });
+            finalSuggestion = Object.getOwnPropertyNames(genreSimilarity).reduce(function(a, b){ return genreSimilarity[a] > genreSimilarity[b] ? a : b });
+            console.log(finalSuggestion)
+            document.getElementById("finalSuggest").textContent = finalSuggestion.charAt(0).toUpperCase() + finalSuggestion.slice(1);
+        });
+
 });
 
 nextBtnSixth.addEventListener("click", function(event){
     event.preventDefault();
     slidePage.style.marginLeft = "-150%";
-    bullet[current - 1].classList.add("active");
-    progressCheck[current -1].classList.add("active");
-    progressText[current -1].classList.add("active");
-    current += 1;
     bullet[current - 1].classList.add("active");
     progressCheck[current -1].classList.add("active");
     progressText[current -1].classList.add("active");
@@ -133,6 +146,12 @@ submitBtn.addEventListener("click", function(){
     progressCheck[current - 1].classList.add("active");
     progressText[current - 1].classList.add("active");
     current += 1;
+
+});
+
+submitBtn2.addEventListener("click", function(){
+    event.preventDefault();
+    slidePage.style.marginLeft = "-175%";
     var rec = document.getElementById("rec").value;
 
     //Date.now() serves as unique id. Write data to db with genre
@@ -140,11 +159,46 @@ submitBtn.addEventListener("click", function(){
 
 });
 
-submitBtn2.addEventListener("click", function(){
-    event.preventDefault();
-    slidePage.style.marginLeft = "-175%";
-    bullet[current - 1].classList.add("active");
-    progressCheck[current -1].classList.add("active");
-    progressText[current -1].classList.add("active");
-    current += 1;
-});
+
+//Stackoverflow for checking string similarity
+//https://stackoverflow.com/questions/10473745/compare-strings-javascript-return-of-likely
+function similarity(s1, s2) {
+    var longer = s1;
+    var shorter = s2;
+    if (s1.length < s2.length) {
+        longer = s2;
+        shorter = s1;
+    }
+    var longerLength = longer.length;
+    if (longerLength == 0) {
+        return 1.0;
+    }
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
+function editDistance(s1, s2) {
+    s1 = s1.toLowerCase();
+    s2 = s2.toLowerCase();
+
+    var costs = new Array();
+    for (var i = 0; i <= s1.length; i++) {
+        var lastValue = i;
+        for (var j = 0; j <= s2.length; j++) {
+            if (i == 0)
+                costs[j] = j;
+            else {
+                if (j > 0) {
+                    var newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                        newValue = Math.min(Math.min(newValue, lastValue),
+                            costs[j]) + 1;
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+        }
+        if (i > 0)
+            costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
+}
